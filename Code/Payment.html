@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Payment</title>
+  <link rel="stylesheet" href="../Code/StylePayment2.css">
+  <!-- <script src="../Code/full.js"></script>  -->
+</head>
+
+<body>
+  <div class="body_container">
+    <div class="navbar_container">
+      <nav>
+        <ul>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav1">1</div>
+              <div class="text_nav">Delivery</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav2">2</div>
+              <div class="text_nav">Shipment</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav3">3</div>
+              <div class="text_nav">Finish</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="page_container">
+      <form name="DDForm" class="DDForm1" action="../Code/Finish.html" onsubmit="return validateform2()" method="post">
+      <div class="Shipment_Container">
+        <div class="Shipment_Details">
+          <a href="../Code/Homepage.html" class="previous_delivpage">&#8249; Back to Delivery</a>
+          <div class="SD_upper_container">
+            <div class="SD_body_title">
+              <h1>Shipment</h1>
+            </div>
+          </div>
+          <div class="SD_Body">
+            <div class="SD_Body_Shipping">
+              <div class="shipping_btn" id="goSend">
+                Go-Send
+                <br>
+                15,000
+              </div>
+              <div class="shipping_btn" id="JNE">
+                JNE
+                <br>
+                9,000
+              </div>
+              <div class="shipping_btn" id="PersonalC">
+                Personal Courier
+                <br>
+                29,000
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Payment_Container">
+          <div class="PD_upper_container">
+            <div class="PD_body_title">
+              <h1>Payment</h1>
+            </div>
+          </div>
+          <div class="PD_Body">
+            <div class="PD_Body_Payment">
+              <div class="payment_btn" id="eWallet">
+                e-Wallet
+                <br>
+                1,500,000 left
+              </div>
+              <div class="payment_btn" id="bank_trf">
+                Bank Transfer
+                <br>
+              </div>
+              <div class="payment_btn" id="VA">
+                Virtual Account
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="Summary">
+        <div class="Summary_upper_container">
+          <div class="Sm_Body_title">
+            <h2>Summary</h2>
+          </div>
+          <div class="total_item">10 item purchased</div>
+        </div>
+        <div class="Summary_deliv_container" id="smDeliv_container">
+          <div class="Sm_deliv_title">
+            Delivery Estimation
+          </div>
+          <div class="sm_deliv_detail">
+            <div class="deliv_time" id="delivTime"></div>
+            <div class="deliv_name" id="delivName"></div>
+          </div>
+        </div>
+        <div class="Summary_detail_container">
+          <div class="CostOfGoods_container">
+            <div class="cog_text">Cost of Goods</div>
+            <div class="cog_value" id="cog">500,000</div>
+          </div>
+          <div class="Dropshipping_fee_container" id="df_container">
+            <div class="df_text" id="df_text">Dropshipping Fee</div>
+            <div class="df_value" id="df"></div>
+          </div>
+          <div class="Shipment_fee_container">
+            <div class="shipment_text">
+              Shipment
+            </div>
+            <div class="shipment_value" id="sv"></div>
+          </div>
+          <div class="total_price_container">
+            <div class="tp_text">
+              <h3>Total</h3>
+            </div>
+            <div class="tp_value" id="tp"></div>
+          </div>
+          <div class="button_continue_payment">
+            <button type=submit>
+              Continue to payment
+              <span class="pyBtn" id="pyBtnTxt"></span>
+            </button> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script> -->
+  <!-- <script src="../Code/vue.js"></script> -->
+  <script src="../Code/localstorage.js"></script>
+  <script>
+    //dropshipper
+    var dfContainer = document.getElementById("df_container");
+    var dftextt = document.getElementById("df_text");
+    var dropshipFeeSave3 = localStorage.getItem("dropshipFeeSave");
+    var dropshipFeeValue = 0;
+    if (dropshipFeeSave3 != 5900) {
+      dfContainer.style.display = "none";
+      dftextt.style.display = "none";
+      var dropshipFeeValue = 0;
+      
+    } else {
+      dfContainer.style.display = "flex";
+      dftextt.style.display = "flex";
+      document.getElementById("df").innerHTML = localStorage.getItem("dropshipFeeSave");
+      var dropshipFeeValue = 5900;
+    }
+
+    //shipment method
+    document.getElementById("goSend").addEventListener("click", shippingmethod);
+    document.getElementById("JNE").addEventListener("click", shippingmethod2);
+    document.getElementById("PersonalC").addEventListener("click", shippingmethod3);
+    
+    var sv_price = 0;
+    var costGoods = 500000;
+    var tempTotal = 0;
+    var shipping = '';
+    var deliv = '';
+    function shippingmethod() {//GO-SEND
+      document.getElementById("delivTime").innerHTML = "Today &#8287";
+      document.getElementById("delivName").innerHTML = "by GO-SEND";
+      document.getElementById("goSend").style.borderColor = "green";
+      document.getElementById("JNE").style.borderColor = "grey";
+      document.getElementById("PersonalC").style.borderColor = "grey";
+      document.getElementById("sv").innerHTML = "15000";
+      sv_price = 15000;
+      calculateTotal();
+      shipping = "GO-SEND";
+      deliv = "Today";
+    }
+
+    function shippingmethod2() {//JNE
+      document.getElementById("delivTime").innerHTML = "2 days &#8287";
+      document.getElementById("delivName").innerHTML = "by JNE";
+      document.getElementById("goSend").style.borderColor = "grey";
+      document.getElementById("JNE").style.borderColor = "green";
+      document.getElementById("PersonalC").style.borderColor = "grey";
+      document.getElementById("sv").innerHTML = "9000";
+      sv_price = 9000;
+      calculateTotal();
+      shipping = 'JNE';
+      deliv = '2 days';
+    }
+
+    function shippingmethod3() {//Personal Courier
+      document.getElementById("delivTime").innerHTML = "1 day &#8287";
+      document.getElementById("delivName").innerHTML = "by Personal Courier";
+      document.getElementById("goSend").style.borderColor = "grey";
+      document.getElementById("JNE").style.borderColor = "grey";
+      document.getElementById("PersonalC").style.borderColor = "green";
+      document.getElementById("sv").innerHTML = "29000";
+      sv_price = 29000;
+      calculateTotal();
+      shipping = "Personal Courier";
+      deliv = "1 Days";
+    }
+
+
+
+    //payment method
+    document.getElementById("eWallet").addEventListener("click", paymenmethod);
+    document.getElementById("bank_trf").addEventListener("click", paymenmethod2);
+    document.getElementById("VA").addEventListener("click", paymenmethod3);
+    
+    var sv_price = 0;
+    var costGoods = 500000;
+    var tempTotal = 0;
+    var paymenmethod_id = 0;
+    function paymenmethod() {//ewallet
+      document.getElementById("eWallet").style.borderColor = "green";
+      document.getElementById("bank_trf").style.borderColor = "grey";
+      document.getElementById("VA").style.borderColor = "grey";
+      paymenmethod_id = 1;
+      document.getElementById("pyBtnTxt").innerHTML = "&#8287" + "e-Wallet";
+    }
+    function paymenmethod2() {//bank transfer
+      document.getElementById("eWallet").style.borderColor = "grey";
+      document.getElementById("bank_trf").style.borderColor = "green";
+      document.getElementById("VA").style.borderColor = "grey";
+      paymenmethod_id = 2;
+      document.getElementById("pyBtnTxt").innerHTML = "&#8287" + "Bank Transfer";
+    }
+    function paymenmethod3() {//virtual account
+      document.getElementById("eWallet").style.borderColor = "grey";
+      document.getElementById("bank_trf").style.borderColor = "grey";
+      document.getElementById("VA").style.borderColor = "green";
+      paymenmethod_id = 3;
+      document.getElementById("pyBtnTxt").innerHTML = "&#8287" + "Virtual Account";
+    }
+
+    //calculation
+    var tempTotal = costGoods + dropshipFeeValue;
+    var totalPrice3 = 0;
+    function calculateTotal() {
+      var totalPrice3 = costGoods + dropshipFeeValue + sv_price;
+      document.getElementById("tp").innerHTML = totalPrice3;
+    }
+
+    //validate
+    function validateform2(){
+      calculateTotal();
+      // if (totalPrice3 == tempTotal){
+      //   window.alert("Please Select Shipping Method");
+      //   return false;
+      // }
+      savevalue2();
+      // return true;
+    };
+  </script>
+  <script src="../Code/localstorage2.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Finish</title>
+    <link rel="stylesheet" href="../Code/StyleFinish2.css">
+    <!-- <script src="../Code/full.js"></script>  -->
+  </head>
+  <body>
+    <div class="body_container">
+      <div class="navbar_container">
+        <nav>
+          <ul>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav1">1</div>
+              <div class="text_nav">Delivery</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav2">2</div>
+              <div class="text_nav">Shipment</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav3">3</div>
+              <div class="text_nav">Finish</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="page_container">
+        <div class="Finish_Details">
+          <div class="FD_upper_container">
+            <div class="FD_body_title"> <h1>Thank You</h1></div>
+          </div>
+          <div class="FD_Body">
+            <div class="order_Id_Container">
+              <div class="order_Id_Text">
+                Order ID: 
+              </div>
+              <div class="order_Id_view" id="orderId_Value"></div>
+            </div>
+            <br>
+            <div class="shipment_details_Container">
+              <div class="shipment_Text">
+                Your Order will be delivered 
+              </div>
+              <div class="shipment_details">
+                <div class="shipment_time" id="ship_time"></div>
+                <div class="shipment_by" id="ship_by"></div>
+              </div>
+            </div>
+          </div>
+          <a href="../Code/Homepage.html" class="previous_homepage">&#8249; Go to Homepage</a>
+        </div>
+        <div class="Summary">
+          <div class="Summary_upper_container">
+            <div class="Sm_Body_title">
+              <h2>Summary</h2>
+            </div>
+            <div class="total_item">10 item purchased</div>
+          </div>
+          <div class="Summary_deliv_container" id="smDeliv_container">
+            <div class="Sm_deliv_title">
+              Delivery Estimation
+            </div>
+            <div class="sm_deliv_detail">
+              <div class="deliv_time" id="delivTime"></div>
+              <div class="deliv_name" id="delivName"></div>
+            </div>
+          </div>
+          <div class="Summary_payment_container" id="smPy_container">
+            <div class="Sm_payment_title">
+              Payment Method
+            </div>
+            <div class="sm_payment_detail" id="smPy_text">
+            </div>
+          </div>
+          <div class="Summary_detail_container">
+            <div class="CostOfGoods_container">
+              <div class="cog_text">Cost of goods</div>
+              <div class="cog_value" id="cog">500,000</div>
+            </div>
+            <div class="Dropshipping_fee_container" id="df_container"> 
+              <div class="df_text" id="df_text">Dropshipping Fee</div>
+              <div class="df_value" id="df"></div>
+            </div>
+            <div class="Shipment_fee_container">
+              <div class="shipment_method_box">
+                <div class="shipment_method" id="st"></div> 
+                <div class="shipent_text">Shipment</div>
+              </div>
+              <div class="shipment_value" id="sv"></div>
+            </div>
+            <div class="total_price_container">
+              <div class="tp_text"><h3>Total</h3></div>
+              <div class="tp_value" id="tp"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      //dropship
+      var dfContainer = document.getElementById("df_container");
+      var dftextt = document.getElementById("df_text");
+      var dropshipFeeSave3 = localStorage.getItem("dropshipFeeSave");
+      var dropshipFeeValue = 0;
+      if (dropshipFeeSave3 != 5900) {
+        dfContainer.style.display = "none";
+        dftextt.style.display = "none";
+      var dropshipFeeValue = 0;
+      
+      } else {
+        dfContainer.style.display = "flex";
+        dftextt.style.display = "flex";
+        document.getElementById("df").innerHTML = localStorage.getItem("dropshipFeeSave");
+        var dropshipFeeValue = 5900;
+      }
+
+      //validate-shipment
+      var costGoods = 500000;
+      var totalPrice3 = 0;
+      var shipmentprice = localStorage.getItem("shipmentTotal");
+      var shipmenttotal = 0;
+      var delivTimeVar = "";
+      var delivNameVar = "";
+
+      if (shipmentprice == 15000){
+        shipmenttotal = 15000;
+        delivTimeVar = "Today";
+        delivNameVar = "GO-SEND"
+      }
+      else if (shipmentprice == 9000){
+        shipmenttotal = 9000;
+        delivTimeVar = "2 Days";
+        delivNameVar = "JNE"
+      }
+      else{
+        shipmenttotal = 29000;
+        delivTimeVar = "1 Days";
+        delivNameVar = "Personal Courier";
+      }
+
+      //validate-paymentMethod
+      var pyMethodValueCheck = localStorage.getItem("pyMethodValue");
+      var pyMethodValue2 = "";
+      if (pyMethodValueCheck == 1){
+        pyMethodValue2 = "e-Wallet";
+        document.getElementById("smPy_text").innerHTML = "&#8287" + pyMethodValue2;
+      }
+      else if (pyMethodValueCheck == 2){
+        pyMethodValue2 = "Bank Transfer";
+        document.getElementById("smPy_text").innerHTML = "&#8287" + pyMethodValue2;
+      }
+      else{
+        pyMethodValue2= "Virtual Account";
+        document.getElementById("smPy_text").innerHTML = "&#8287" + pyMethodValue2;
+      }
+      
+      //insert to
+      document.getElementById("ship_time").innerHTML = delivTimeVar + "&#8287";
+      document.getElementById("ship_by").innerHTML = " " + delivNameVar;
+      document.getElementById("delivTime").innerHTML = delivTimeVar + "&#8287";
+      document.getElementById("delivName").innerHTML = " " + delivNameVar;
+      document.getElementById("st").innerHTML = delivNameVar + "&#8287";
+      document.getElementById("sv").innerHTML = localStorage.getItem("shipmentTotal");
+
+      //calculation
+      function calculateTotal() {
+      var totalPrice3 = costGoods + dropshipFeeValue + shipmenttotal;
+      document.getElementById("tp").innerHTML = totalPrice3;
+      }
+     calculateTotal(); 
+
+      //random id generator
+     function makeid() {
+      var text = "";
+      var possible = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+      for (var i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+      };
+      document.getElementById("orderId_Value").innerHTML = "&#8287"+ makeid();
+    </script>
+    <script src="../Code/localstorage.js"></script>
+    <script src="../Code/localstorage2.js"></script>
+  </body>
+</html>

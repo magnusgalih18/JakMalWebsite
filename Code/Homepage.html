@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Homepage</title>
+  <link rel="stylesheet" href="../Code/StyleHomepage2.css">
+</head>
+
+<body>
+  <div class="body_container" id="app">
+    <div class="navbar_container">
+      <nav>
+        <ul>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav1">1</div>
+              <div class="text_nav">Delivery</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav2">2</div>
+              <div class="text_nav">Shipment</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+          <li>
+            <div class="navcontent_container">
+              <div class="number_nav" id="nav3">3</div>
+              <div class="text_nav">Finish</div>
+              <div class="arrow_nav">></div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="page_container">
+      <form name="DDForm" class="DDForm1" action="../Code/Payment.html" onsubmit="return validateform()" method="post">
+        <div class="Delivery_Details">
+          <a href="#" class="previous_homepage">&#8249; Back to Cart</a>
+          <div class="DD_upper_container">
+            <div class="DD_body_title">
+              <h1>Delivery Details</h1>
+            </div>
+            <div class="option_dropshipper">
+              <input type="checkbox" id="dropship_check" onclick="validateChecker()"> Send as
+              Dropshipper </div>
+          </div>
+          <div class="DD_Body">
+            <div class="DD_Body_User">
+              <input type="email" placeholder="Email" id="emaile" v-model='emailUse' name="emailForm">
+              <br>
+              <input type="tel" placeholder="Phone Number" id="phoneUser" v-model='phoneUserUse' name="phoneUserForm">
+              <br>
+              <input type="text" placeholder="Delivery Address" id="addressDeliv" v-model='addressUse' name="addressDelivForm">
+              <div id="addressDeliv_Remaining"></div>
+            </div>
+            <div class="DD_Body_Dropshiper" id="check_contain">
+              <input type="text" placeholder="Dropshipper Name" id="nameDropshipper" v-model='nDUse' name="nameDropshipperForm">
+              <br>
+              <input type="tel" placeholder="Dropshipper Phone Number" id="phoneDropshipper" v-model='pDUse' name="phoneDropshipperForm">
+              <br>
+            </div>
+          </div>
+        </div>
+        <div class="Summary">
+          <div class="Summary_upper_container">
+            <div class="Sm_Body_title">
+              <h2>Summary</h2>
+            </div>
+            <div class="total_item">10 item purchased</div>
+          </div>
+          <div class="Summary_detail_container">
+            <div class="CostOfGoods_container">
+              <div class="cog_text">Cost of Goods</div>
+              <div class="cog_value" id="cog">500,000</div>
+            </div>
+            <div class="Dropshipping_fee_container" id="ds_fee">
+              <div class="df_text">Dropshipping Fee</div>
+              <div class="df_value" id="df">5,900</div>
+            </div>
+            <div class="total_price_container">
+              <div class="tp_text">
+                <h3>Total</h3>
+              </div>
+              <div class="tp_value" id="tp">
+                <!-- <h3><output name="tp_view" for="cog df"></output>505,900 </h3> -->
+              </div>
+            </div>
+            <div class="button_continue_payment">
+              <input type="submit" value="Continue to payment">
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script> -->
+  <!-- <script src="../Code/vue.js"></script> -->
+  <script>
+    //Check if Cheked
+    var costGoods = 500000;
+    var dropshipFee = 0;
+    var totalPrice = costGoods + dropshipFee;
+    calculateTotal();
+
+    function validateChecker() {
+      var checkBox = document.getElementById("dropship_check");
+      var containerDD = document.getElementById("check_contain");
+      var containerDsFee = document.getElementById("ds_fee");
+      if (checkBox.checked == true){
+          containerDD.style.display = "flex";
+          containerDD.style.flexDirection = "column";
+          containerDsFee.style.display = "flex";
+          dropshipFee = 5900;
+          calculateTotal();
+          validateform();
+      }
+      else {
+        containerDD.style.display = "none";
+        containerDsFee.style.display = "none";
+        dropshipFee = 0;
+        calculateTotal();
+      }
+
+    };
+
+    function calculateTotal() {
+      var totalPrice = costGoods + dropshipFee;
+      document.getElementById("tp").innerHTML = totalPrice;
+      localStorage.setItem("totalPriceSave", totalPrice);
+    }
+
+    //Address Deliv Counter
+      const addressDeliv = document.getElementById('addressDeliv');
+      const remainingAddress = document.getElementById('addressDeliv_Remaining');
+      const MAX_CHARS = 120;
+
+      addressDeliv.addEventListener('input', () => {
+        const remaining = MAX_CHARS - addressDeliv.value.length;
+        const color = remaining < MAX_CHARS * 0.1 ? 'red' : null;
+
+        remainingAddress.textContent = `${remaining} characters remaining`;
+        remainingAddress.style.color = color;
+
+      });
+
+    function validateform() {
+      var email = document.DDForm.emailForm.value;
+      var phoneUser = document.DDForm.phoneUserForm.value;
+      var addressDelivCheck  = document.DDForm.addressDelivForm.value;
+
+      // validate email
+      var atposition = email.indexOf("@");
+      var dotposition = email.lastIndexOf(".");
+      if (atposition < 1 || dotposition < atposition + 2 || dotposition + 2 >= email.length) {
+        document.getElementById("emaile").style.borderColor = "#ff8a00";
+        return false;
+      }
+      else{
+        document.getElementById("emaile").style.borderColor = "#41df91";
+      }
+
+      //validate phonenumber
+      var phonevalid = /^[0-9-+()]+$/;
+      if (phoneUser==null || phoneUser==""){
+        document.getElementById("phoneUser").style.borderColor = "#ff8a00";
+          return false;
+      }
+      if (phoneUser.length <6 || phoneUser.length >20){
+        document.getElementById("phoneUser").style.borderColor = "#ff8a00";
+        return false;
+      }
+      if (!phoneUser.match(phonevalid)){
+        document.getElementById("phoneUser").style.borderColor = "#ff8a00";
+          return false;
+      }
+      else{
+        document.getElementById("phoneUser").style.borderColor = "#41df91";
+      }
+      
+      //validate Address Deliv
+      if (addressDelivCheck.length <1 || addressDelivCheck.length > 120){
+        document.getElementById("addressDeliv").style.borderColor = "#ff8a00";
+        return false;
+      }
+      else{
+        document.getElementById("addressDeliv").style.borderColor = "#41df91";
+      }
+
+      var checkBox = document.getElementById("dropship_check");
+      var containerDD = document.getElementById("check_contain");
+      var containerDsFee = document.getElementById("ds_fee");
+      if (checkBox.checked == true){
+        var dsNameCheck = document.DDForm.nameDropshipperForm.value;
+        var dsPhoneCheck = document.DDForm.phoneDropshipperForm.value;
+        
+        //validate dropshipper name
+        if (dsNameCheck ==""){
+          document.getElementById("nameDropshipper").style.borderColor = "#ff8a00";
+        return false;
+        }
+        else{
+        document.getElementById("nameDropshipper").style.borderColor = "#41df91";
+        }
+
+        //validate drophipperphone
+        if (dsPhoneCheck==null || dsPhoneCheck==""){
+          document.getElementById("phoneDropshipper").style.borderColor = "#ff8a00";
+        return false;
+        }
+        if (dsPhoneCheck.length <6 || dsPhoneCheck.length >20){
+          document.getElementById("phoneDropshipper").style.borderColor = "#ff8a00";
+          return false;
+        }
+        if (!dsPhoneCheck.match(phonevalid)){
+          document.getElementById("phoneDropshipper").style.borderColor = "#ff8a00";
+        return false;
+        }
+        else{
+          document.getElementById("phoneDropshipper").style.borderColor = "#41df91";
+        }
+
+      }
+
+      savevalue();
+      return true;
+    };
+  </script>
+  <script src="../Code/localstorage.js"></script>
+</body>
+
+</html>
